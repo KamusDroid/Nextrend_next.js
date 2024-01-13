@@ -1,0 +1,1 @@
+# Nextrend_next.js
