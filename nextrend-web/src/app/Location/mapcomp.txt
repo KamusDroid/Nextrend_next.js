@@ -10,8 +10,22 @@ interface MarkerData {
   title: string;
 }
 
-const MapComponent: FC = () => {
+interface MapComponentProps {
+  onUpdateMarkers: (markerData: MarkerData[]) => void;
+  latitud: string;  // Ajusta el tipo según corresponda
+  longitud: string; // Ajusta el tipo según corresponda
+}
+
+// ...
+
+export const MapComponent: FC<MapComponentProps> = ({ onUpdateMarkers, latitud, longitud }) => {
+  // ...
+};
+
+
+export const MapComponent: FC<MapComponentProps> = ({ onUpdateMarkers }) => {
   const [markerData, setMarkerData] = useState<MarkerData | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const mapRef = useRef<any | null>(null);
 
@@ -29,7 +43,7 @@ const MapComponent: FC = () => {
 
     useMapEvents({
       zoomend: () => {
-        // Aquí puedes realizar acciones adicionales después de que termina el zoom
+        setLoading(false);
       },
     });
 
@@ -44,8 +58,38 @@ const MapComponent: FC = () => {
     return null;
   };
 
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      // Supongamos que obtienes los datos de la API asíncronamente
+      const response = await fetch(`http://127.0.0.1:8500/r.cercania?lat=${latitud}&long=${longitud}`);
+      const data = await response.json();
+
+      // Verifica la estructura de 'data' antes de mapear
+      if (Array.isArray(data)) {
+        // Lógica para mapear la respuesta de la API a tus datos de marcadores
+        const apiMarkers: MarkerData[] = data.map((item: any) => ({
+          coordinates: [item.latitude, item.longitude] as [number, number],
+          title: item.name,
+        }));
+
+        // Actualizar el estado con los nuevos marcadores
+        setMarkerData(apiMarkers[0]);
+        // Llamar a la función onUpdateMarkers para actualizar los marcadores externos
+        onUpdateMarkers(apiMarkers[0]);
+      } else {
+        console.error("La respuesta de la API no es un array válido:", data);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className={styles.mapContainer}>
+
       {markerData && markerData.coordinates && (
         <div className="flex items-center justify-center absolute top-3 right-3 z-[100000]">
           <h1 className="text-3xl font-bold text-black p-2 bg-white rounded-md z-[100000]">{markerData.title}</h1>
@@ -63,6 +107,14 @@ const MapComponent: FC = () => {
 
         <ZoomHandler />
       </MapContainer>
+
+      <div className="absolute bottom-5 left-0 w-full z-[10000] p-3">
+        <div className="flex justify-center">
+          <button onClick={handleSubmit} className="p-2 ml-2 bg-blue-500 text-white rounded-md">
+            Submit
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

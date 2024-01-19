@@ -5,7 +5,7 @@ import styles from '../../sass/dashboard.module.sass'
 const DashboardPage = () => {
   useEffect(() => {
     // Coloca aquí el código de embebido proporcionado por Power BI
-    const embedCode = '<iframe title="Report Section" width="1200" height="750" src="https://app.powerbi.com/view?r=eyJrIjoiYzNlYjhlYjktZDA4Yy00OWFlLWJmODgtZjY0Yzc2ODg1ODY1IiwidCI6ImZkNjljZTFiLTIwYzYtNDJlYy1iNTRlLTZkMWIzODcwYWM2ZSIsImMiOjR9" frameborder="0" allowFullScreen="true"></iframe>';
+    const embedCode = '<iframe title="Report Section" width="1200" height="750" src="https://app.powerbi.com/view?r=eyJrIjoiYmQ4MDgxNjEtZjViOC00YmYxLTlhYTktNzgxOGYwZWE5Yjc2IiwidCI6ImZkNjljZTFiLTIwYzYtNDJlYy1iNTRlLTZkMWIzODcwYWM2ZSIsImMiOjR9" frameborder="0" allowFullScreen="true"></iframe>';
 
     // Encuentra el contenedor en tu página (puede ser un div con un id específico)
     const container = document.getElementById('powerBiContainer');
