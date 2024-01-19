@@ -20,8 +20,9 @@
     ],
     "paths": {
       "app/*": ["./src/*"]
+      
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "../map/chakra/_app.ts"],
   "exclude": ["node_modules"]
 }
